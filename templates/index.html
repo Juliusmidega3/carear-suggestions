@@ -1,39 +1,110 @@
-<!-- recommendations/templates/recommendations/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Career Suggestion System</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="text"], input[type="number"], select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #777;
+        }
+    </style>
 </head>
 <body>
-    <h1>Career Suggestion Form</h1>
-    <form action="{% url 'get_recommendations' %}" method="post">
-        {% csrf_token %}
-        <label for="eq_score">EQ Score:</label>
-        <input type="number" name="eq_score" required><br>
 
-        <label for="openness">Openness:</label>
-        <input type="number" name="openness" required><br>
-        
-        <label for="conscientiousness">Conscientiousness:</label>
-        <input type="number" name="conscientiousness" required><br>
-        
-        <label for="extroversion">Extroversion:</label>
-        <input type="number" name="extroversion" required><br>
-        
-        <label for="agreeableness">Agreeableness:</label>
-        <input type="number" name="agreeableness" required><br>
-        
-        <label for="neuroticism">Neuroticism:</label>
-        <input type="number" name="neuroticism" required><br>
-        
-        <label for="academic_background">Academic Background (comma-separated):</label>
-        <input type="text" name="academic_background" required><br>
-        
-        <label for="interests">Interests (comma-separated):</label>
-        <input type="text" name="interests" required><br>
-        
-        <button type="submit">Get Career Suggestions</button>
-    </form>
+    <header>
+        <h1>Welcome to the Career Suggestion System</h1>
+    </header>
+
+    <div class="container">
+        <h2>Input Your Details</h2>
+        <form method="POST" action="{% url 'recommendations:get_recommendations' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="eq_score">Emotional Intelligence (EQ) Score:</label>
+                <input type="number" id="eq_score" name="eq_score" required>
+            </div>
+            <div class="form-group">
+                <label for="personality_traits">Personality Traits:</label>
+                <input type="text" id="personality_traits" name="personality_traits" required placeholder="e.g. Introverted, Creative">
+            </div>
+            <div class="form-group">
+                <label for="academic_background">Academic Background:</label>
+                <input type="text" id="academic_background" name="academic_background" required placeholder="e.g. Bachelor's in Computer Science">
+            </div>
+            <div class="form-group">
+                <label for="personal_interests">Personal Interests:</label>
+                <input type="text" id="personal_interests" name="personal_interests" required placeholder="e.g. Technology, Music">
+            </div>
+            <input type="submit" value="Get Career Suggestions">
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Career Suggestion System. All rights reserved.</p>
+    </footer>
+
 </body>
 </html>

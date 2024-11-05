@@ -17,7 +17,7 @@ career_data = pd.DataFrame({
 })
 
 def index(request):
-    return render(request, 'recommendations/index.html')
+    return render(request, 'index.html')
 
 def get_recommendations(request):
     if request.method == 'POST':
@@ -45,6 +45,6 @@ def get_recommendations(request):
         recommendations = recommend_careers(user_data, career_data)
 
         # Pass recommendations to results page
-        return render(request, 'recommendations/results.html', {'careers': recommendations})
+        return render(request, 'results.html', {'careers': recommendations})
 
-    return render(request, 'recommendations/index.html')
+    return render(request, 'index.html')
