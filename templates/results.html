@@ -1,0 +1,17 @@
+<!-- recommendations/templates/recommendations/results.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Career Suggestions</title>
+</head>
+<body>
+    <h1>Your Career Suggestions</h1>
+    <ul>
+        {% for index, row in careers.iterrows %}
+            <li>{{ index + 1 }}. {{ row.career }} - Match Score: {{ row.match_score|round:2 }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'index' %}">Back to Home</a>
+</body>
+</html>

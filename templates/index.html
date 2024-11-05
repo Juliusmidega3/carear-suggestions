@@ -1,0 +1,39 @@
+<!-- recommendations/templates/recommendations/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Career Suggestion System</title>
+</head>
+<body>
+    <h1>Career Suggestion Form</h1>
+    <form action="{% url 'get_recommendations' %}" method="post">
+        {% csrf_token %}
+        <label for="eq_score">EQ Score:</label>
+        <input type="number" name="eq_score" required><br>
+
+        <label for="openness">Openness:</label>
+        <input type="number" name="openness" required><br>
+        
+        <label for="conscientiousness">Conscientiousness:</label>
+        <input type="number" name="conscientiousness" required><br>
+        
+        <label for="extroversion">Extroversion:</label>
+        <input type="number" name="extroversion" required><br>
+        
+        <label for="agreeableness">Agreeableness:</label>
+        <input type="number" name="agreeableness" required><br>
+        
+        <label for="neuroticism">Neuroticism:</label>
+        <input type="number" name="neuroticism" required><br>
+        
+        <label for="academic_background">Academic Background (comma-separated):</label>
+        <input type="text" name="academic_background" required><br>
+        
+        <label for="interests">Interests (comma-separated):</label>
+        <input type="text" name="interests" required><br>
+        
+        <button type="submit">Get Career Suggestions</button>
+    </form>
+</body>
+</html>
