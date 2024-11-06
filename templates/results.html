@@ -1,96 +1,90 @@
-{% load custom_filters %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Career Suggestions</title>
+    <title>Career Recommendations</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f7fc;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            color: #333;
-        }
-        header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px;
-            text-align: center;
+            background-color: #f4f4f4;
         }
         .container {
             width: 80%;
             margin: 20px auto;
             padding: 20px;
-            background-color: white;
+            background-color: #fff;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
+            text-align: center;
             color: #333;
         }
-        ul {
-            list-style-type: none;
-            padding: 0;
+        .career-list {
+            margin-top: 20px;
         }
-        li {
-            background-color: #f9f9f9;
-            margin: 10px 0;
+        .career-item {
             padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            font-size: 18px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            background-color: #f9f9f9;
         }
-        li:hover {
-            background-color: #e7f5e6;
+        .career-item h2 {
+            margin: 0;
+            color: #444;
         }
-        .career-name {
-            font-weight: bold;
+        .career-item p {
+            margin: 5px 0;
+            color: #666;
         }
         .match-score {
-            font-size: 16px;
-            color: #555;
+            font-weight: bold;
+            color: #3a7d44;
         }
-        .back-btn {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
+        .recommendation-footer {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .button {
             background-color: #4CAF50;
             color: white;
-            text-decoration: none;
+            padding: 10px 20px;
+            border: none;
             border-radius: 5px;
+            cursor: pointer;
             font-size: 16px;
-            text-align: center;
         }
-        .back-btn:hover {
+        .button:hover {
             background-color: #45a049;
         }
     </style>
 </head>
 <body>
-
-    <header>
-        <h1>Your Career Suggestions</h1>
-    </header>
-
     <div class="container">
-        <ul>
-            {% for career in careers %}
-                <li>
-                    <span class="career-name">{{ forloop.counter }}. {{ career.career }}</span>
-                    <span class="match-score">Match Score: {{ career.match_score|round:2 }}</span>
-                </li>
-            {% endfor %}
-        </ul>
+        <h1>Career Recommendations Based on Your Profile</h1>
+        
+        {% if careers %}
+            <div class="career-list">
+                {% for career in careers %}
+                    <div class="career-item">
+                        <h2>{{ career.career }}</h2>
+                        <p><strong>Relevant Fields:</strong> {{ career.relevant_fields|join:", " }}</p>
+                        <p><strong>Related Interests:</strong> {{ career.related_interests|join:", " }}</p>
+                        <p class="match-score">Match Score: {{ career.match_score }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No career recommendations available. Please check your input and try again.</p>
+        {% endif %}
 
-        <a href="{% url 'index' %}" class="back-btn">Back to Home</a>
+        <div class="recommendation-footer">
+            <a href="/" class="button">Back to Home</a>
+        </div>
     </div>
-
 </body>
 </html>

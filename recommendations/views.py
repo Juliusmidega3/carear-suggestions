@@ -1,4 +1,3 @@
-# recommendations/views.py
 from django.shortcuts import render
 import pandas as pd
 from main import recommend_careers  # Import recommendation function
@@ -21,30 +20,56 @@ def index(request):
 
 def get_recommendations(request):
     if request.method == 'POST':
-        # Retrieve user input from the form
-        eq_score = int(request.POST['eq_score'])
-        personality_traits = {
-            'openness': int(request.POST['openness']),
-            'conscientiousness': int(request.POST['conscientiousness']),
-            'extroversion': int(request.POST['extroversion']),
-            'agreeableness': int(request.POST['agreeableness']),
-            'neuroticism': int(request.POST['neuroticism'])
-        }
-        academic_background = request.POST['academic_background'].split(',')
-        interests = request.POST['interests'].split(',')
+        try:
+            # Retrieve user input from the form using get() to avoid KeyError
+            eq_score = int(request.POST.get('eq_score', 0))  # Default to 0 if not provided
+            personality_traits = {
+                'openness': int(request.POST.get('openness', 0)),  # Default to 0 if not provided
+                'conscientiousness': int(request.POST.get('conscientiousness', 0)),
+                'extroversion': int(request.POST.get('extroversion', 0)),
+                'agreeableness': int(request.POST.get('agreeableness', 0)),
+                'neuroticism': int(request.POST.get('neuroticism', 0))
+            }
+            academic_background = request.POST.get('academic_background', '').split(',')
+            interests = request.POST.get('interests', '').split(',')
 
-        # Create user data dictionary
-        user_data = {
-            'eq_score': eq_score,
-            'personality_traits': personality_traits,
-            'academic_background': academic_background,
-            'interests': interests
-        }
+            # Create user data dictionary
+            user_data = {
+                'eq_score': eq_score,
+                'personality_traits': personality_traits,
+                'academic_background': [bg.strip() for bg in academic_background if bg.strip()],
+                'interests': [interest.strip() for interest in interests if interest.strip()]
+            }
 
-        # Run recommendation function
-        recommendations = recommend_careers(user_data, career_data)
+            # Check if all required fields are provided (simple validation)
+            if all(value >= 0 for value in personality_traits.values()) and eq_score >= 0:
+                # Run recommendation function
+                recommendations = recommend_careers(user_data, career_data)
 
-        # Pass recommendations to results page
-        return render(request, 'results.html', {'careers': recommendations})
+                # Debugging: print recommendations to console
+                print("Recommendations:", recommendations)
+
+                # Ensure recommendations is a list of dicts and round match_score
+                if isinstance(recommendations, list) and all(isinstance(career, dict) for career in recommendations):
+                    for career in recommendations:
+                        # Ensure the career dictionary has a 'match_score' key
+                        if 'match_score' in career:
+                            # Round the match score to 2 decimal places before passing to the template
+                            career['match_score'] = round(career['match_score'], 2)
+                        else:
+                            print(f"Warning: 'match_score' not found in career: {career}")
+
+                    # Pass recommendations to results page
+                    return render(request, 'results.html', {'careers': recommendations})
+                else:
+                    raise ValueError("Invalid recommendation format: Expected a list of dicts with 'career' and 'match_score'.")
+
+            else:
+                error_message = 'Please ensure all personality traits and EQ score are provided and valid.'
+                return render(request, 'index.html', {'error': error_message})
+
+        except ValueError as e:
+            error_message = f'There was an error processing your input. Please check your entries. {str(e)}'
+            return render(request, 'index.html', {'error': error_message})
 
     return render(request, 'index.html')

@@ -1,3 +1,4 @@
+{% load custom_filters %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,6 +31,11 @@
             font-size: 28px;
             margin-bottom: 20px;
             color: #333;
+        }
+        h2 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #4CAF50;
         }
         form {
             display: flex;
@@ -64,6 +70,10 @@
         input[type="submit"]:hover {
             background-color: #45a049;
         }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
         footer {
             text-align: center;
             margin-top: 20px;
@@ -80,6 +90,9 @@
 
     <div class="container">
         <h2>Input Your Details</h2>
+        {% if error %}
+            <p class="error-message">{{ error }}</p>
+        {% endif %}
         <form method="POST" action="{% url 'recommendations:get_recommendations' %}">
             {% csrf_token %}
             <div class="form-group">
@@ -87,16 +100,32 @@
                 <input type="number" id="eq_score" name="eq_score" required>
             </div>
             <div class="form-group">
-                <label for="personality_traits">Personality Traits:</label>
-                <input type="text" id="personality_traits" name="personality_traits" required placeholder="e.g. Introverted, Creative">
+                <label for="openness">Openness (0-100):</label>
+                <input type="number" id="openness" name="openness" min="0" max="100" required>
+            </div>
+            <div class="form-group">
+                <label for="conscientiousness">Conscientiousness (0-100):</label>
+                <input type="number" id="conscientiousness" name="conscientiousness" min="0" max="100" required>
+            </div>
+            <div class="form-group">
+                <label for="extroversion">Extroversion (0-100):</label>
+                <input type="number" id="extroversion" name="extroversion" min="0" max="100" required>
+            </div>
+            <div class="form-group">
+                <label for="agreeableness">Agreeableness (0-100):</label>
+                <input type="number" id="agreeableness" name="agreeableness" min="0" max="100" required>
+            </div>
+            <div class="form-group">
+                <label for="neuroticism">Neuroticism (0-100):</label>
+                <input type="number" id="neuroticism" name="neuroticism" min="0" max="100" required>
             </div>
             <div class="form-group">
                 <label for="academic_background">Academic Background:</label>
                 <input type="text" id="academic_background" name="academic_background" required placeholder="e.g. Bachelor's in Computer Science">
             </div>
             <div class="form-group">
-                <label for="personal_interests">Personal Interests:</label>
-                <input type="text" id="personal_interests" name="personal_interests" required placeholder="e.g. Technology, Music">
+                <label for="interests">Personal Interests:</label>
+                <input type="text" id="interests" name="interests" required placeholder="e.g. Technology, Music">
             </div>
             <input type="submit" value="Get Career Suggestions">
         </form>
